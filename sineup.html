@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Billboard Detection AI</title>
+    <meta name="description" content="Create a new Billboard Detection AI account">
+    <link rel="stylesheet" href="style1.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css">
+</head>
+<body class="auth-page">
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="auth-header" role="banner">
+        <div class="auth-header-container">
+            <a href="index.html" class="logo" aria-label="Return to Billboard AI homepage">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+                    <path d="M8 12h16v8H8z" fill="white" opacity="0.9"/>
+                    <path d="M10 14h12v4H10z" fill="url(#gradient)" opacity="0.7"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#2E7D32"/>
+                            <stop offset="100%" stop-color="#66BB6A"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Billboard AI</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="auth-main" role="main">
+        <div class="auth-container">
+            <div class="auth-card">
+                <header class="auth-card-header">
+                    <h1>Create Account</h1>
+                    <p>Join Billboard Detection AI and start analyzing today</p>
+                </header>
+
+                <form class="auth-form" id="signup-form" novalidate>
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <div class="input-group">
+                            <i data-feather="user" class="input-icon" aria-hidden="true"></i>
+                            <input 
+                                type="text" 
+                                id="username" 
+                                name="username"
+                                class="form-control" 
+                                placeholder="Choose a username"
+                                required
+                                autocomplete="username"
+                                aria-describedby="username-error"
+                                minlength="3"
+                                maxlength="20"
+                            >
+                        </div>
+                        <div class="form-error" id="username-error" role="alert"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <i data-feather="mail" class="input-icon" aria-hidden="true"></i>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email"
+                                class="form-control" 
+                                placeholder="Enter your email"
+                                required
+                                autocomplete="email"
+                                aria-describedby="email-error"
+                            >
+                        </div>
+                        <div class="form-error" id="email-error" role="alert"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <i data-feather="lock" class="input-icon" aria-hidden="true"></i>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                class="form-control" 
+                                placeholder="Create a strong password"
+                                required
+                                autocomplete="new-password"
+                                aria-describedby="password-error password-strength"
+                                minlength="6"
+                            >
+                            <button type="button" class="input-action" id="toggle-password" aria-label="Toggle password visibility">
+                                <i data-feather="eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength" id="password-strength">
+                            <div class="strength-meter">
+                                <div class="strength-bar" id="strength-bar"></div>
+                            </div>
+                            <span class="strength-text" id="strength-text">Password strength</span>
+                        </div>
+                        <div class="form-error" id="password-error" role="alert"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password" class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <i data-feather="lock" class="input-icon" aria-hidden="true"></i>
+                            <input 
+                                type="password" 
+                                id="confirm-password" 
+                                name="confirm-password"
+                                class="form-control" 
+                                placeholder="Confirm your password"
+                                required
+                                autocomplete="new-password"
+                                aria-describedby="confirm-password-error"
+                            >
+                            <button type="button" class="input-action" id="toggle-confirm-password" aria-label="Toggle password visibility">
+                                <i data-feather="eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="form-error" id="confirm-password-error" role="alert"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a>
+                        </label>
+                        <div class="form-error" id="terms-error" role="alert"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full" id="signup-btn">
+                        <span class="btn-text">
+                            <i data-feather="user-plus" aria-hidden="true"></i>
+                            Create Account
+                        </span>
+                        <div class="btn-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+
+                    <div class="form-footer">
+                        <p>
+                            Already have an account? 
+                            <a href="login.html" class="auth-link">Sign in</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true">
+        <!-- Toasts will be dynamically added here -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="script.js"></script>
+    <script>
+        // Initialize Feather icons and auth functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+            initializeSignup();
+        });
+
+        function initializeSignup() {
+            const signupForm = document.getElementById('signup-form');
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            const termsCheckbox = document.getElementById('terms');
+            const togglePassword = document.getElementById('toggle-password');
+            const toggleConfirmPassword = document.getElementById('toggle-confirm-password');
+            const signupBtn = document.getElementById('signup-btn');
+            const strengthBar = document.getElementById('strength-bar');
+            const strengthText = document.getElementById('strength-text');
+
+            // Toggle password visibility
+            togglePassword?.addEventListener('click', function() {
+                togglePasswordVisibility(passwordInput, this);
+            });
+
+            toggleConfirmPassword?.addEventListener('click', function() {
+                togglePasswordVisibility(confirmPasswordInput, this);
+            });
+
+            // Password strength indicator
+            passwordInput?.addEventListener('input', function() {
+                updatePasswordStrength(this.value);
+            });
+
+            // Real-time validation
+            usernameInput?.addEventListener('blur', () => validateUsername());
+            emailInput?.addEventListener('blur', () => validateEmail());
+            passwordInput?.addEventListener('blur', () => validatePassword());
+            confirmPasswordInput?.addEventListener('blur', () => validateConfirmPassword());
+
+            // Form submission
+            signupForm?.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    username: usernameInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    password: passwordInput.value,
+                    confirmPassword: confirmPasswordInput.value,
+                    terms: termsCheckbox.checked
+                };
+                
+                // Clear previous errors
+                clearFormErrors();
+                
+                // Validate form
+                if (!validateSignupForm(formData)) {
+                    return;
+                }
+                
+                // Show loading state
+                setSignupLoading(true);
+                
+                try {
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // Store user data
+                    const userData = {
+                        username: formData.username,
+                        email: formData.email,
+                        role: 'User',
+                        signupTime: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    
+                    // Show success message
+                    showToast('Account created successfully! Redirecting...', 'success');
+                    
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                    
+                } catch (error) {
+                    showToast('Failed to create account. Please try again.', 'error');
+                    setSignupLoading(false);
+                }
+            });
+
+            function togglePasswordVisibility(input, button) {
+                const type = input.type === 'password' ? 'text' : 'password';
+                input.type = type;
+                
+                const icon = button.querySelector('i');
+                if (type === 'text') {
+                    icon.setAttribute('data-feather', 'eye-off');
+                } else {
+                    icon.setAttribute('data-feather', 'eye');
+                }
+                feather.replace();
+            }
+
+            function updatePasswordStrength(password) {
+                const strength = calculatePasswordStrength(password);
+                const percentage = (strength.score / 4) * 100;
+                
+                strengthBar.style.width = `${percentage}%`;
+                strengthBar.className = `strength-bar ${strength.level}`;
+                strengthText.textContent = strength.text;
+            }
+
+            function calculatePasswordStrength(password) {
+                let score = 0;
+                let level = 'weak';
+                let text = 'Weak';
+                
+                if (password.length >= 8) score++;
+                if (/[a-z]/.test(password)) score++;
+                if (/[A-Z]/.test(password)) score++;
+                if (/[0-9]/.test(password)) score++;
+                if (/[^A-Za-z0-9]/.test(password)) score++;
+                
+                if (score <= 2) {
+                    level = 'weak';
+                    text = 'Weak';
+                } else if (score === 3) {
+                    level = 'fair';
+                    text = 'Fair';
+                } else if (score === 4) {
+                    level = 'good';
+                    text = 'Good';
+                } else {
+                    level = 'strong';
+                    text = 'Strong';
+                }
+                
+                return { score, level, text };
+            }
+
+            function validateSignupForm(data) {
+                let isValid = true;
+                
+                // Username validation
+                if (!validateUsername()) isValid = false;
+                
+                // Email validation
+                if (!validateEmail()) isValid = false;
+                
+                // Password validation
+                if (!validatePassword()) isValid = false;
+                
+                // Confirm password validation
+                if (!validateConfirmPassword()) isValid = false;
+                
+                // Terms validation
+                if (!data.terms) {
+                    showFieldError('terms', 'You must agree to the terms and conditions');
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+
+            function validateUsername() {
+                const username = usernameInput.value.trim();
+                
+                if (!username) {
+                    showFieldError('username', 'Username is required');
+                    return false;
+                } else if (username.length < 3) {
+                    showFieldError('username', 'Username must be at least 3 characters');
+                    return false;
+                } else if (username.length > 20) {
+                    showFieldError('username', 'Username must be less than 20 characters');
+                    return false;
+                } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                    showFieldError('username', 'Username can only contain letters, numbers, and underscores');
+                    return false;
+                }
+                
+                clearFieldError('username');
+                return true;
+            }
+
+            function validateEmail() {
+                const email = emailInput.value.trim();
+                
+                if (!email) {
+                    showFieldError('email', 'Email is required');
+                    return false;
+                } else if (!isValidEmail(email)) {
+                    showFieldError('email', 'Please enter a valid email address');
+                    return false;
+                }
+                
+                clearFieldError('email');
+                return true;
+            }
+
+            function validatePassword() {
+                const password = passwordInput.value;
+                
+                if (!password) {
+                    showFieldError('password', 'Password is required');
+                    return false;
+                } else if (password.length < 6) {
+                    showFieldError('password', 'Password must be at least 6 characters');
+                    return false;
+                }
+                
+                clearFieldError('password');
+                return true;
+            }
+
+            function validateConfirmPassword() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                
+                if (!confirmPassword) {
+                    showFieldError('confirm-password', 'Please confirm your password');
+                    return false;
+                } else if (password !== confirmPassword) {
+                    showFieldError('confirm-password', 'Passwords do not match');
+                    return false;
+                }
+                
+                clearFieldError('confirm-password');
+                return true;
+            }
+
+            function setSignupLoading(loading) {
+                const btnText = signupBtn.querySelector('.btn-text');
+                const btnSpinner = signupBtn.querySelector('.btn-spinner');
+                
+                if (loading) {
+                    btnText.style.display = 'none';
+                    btnSpinner.style.display = 'flex';
+                    signupBtn.disabled = true;
+                } else {
+                    btnText.style.display = 'flex';
+                    btnSpinner.style.display = 'none';
+                    signupBtn.disabled = false;
+                }
+            }
+
+            function showFieldError(fieldName, message) {
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                const inputElement = document.getElementById(fieldName);
+                
+                if (errorElement && inputElement) {
+                    errorElement.textContent = message;
+                    errorElement.style.display = 'block';
+                    inputElement.classList.add('error');
+                }
+            }
+
+            function clearFieldError(fieldName) {
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                const inputElement = document.getElementById(fieldName);
+                
+                if (errorElement && inputElement) {
+                    errorElement.textContent = '';
+                    errorElement.style.display = 'none';
+                    inputElement.classList.remove('error');
+                }
+            }
+
+            function clearFormErrors() {
+                const errorElements = document.querySelectorAll('.form-error');
+                const inputElements = document.querySelectorAll('.form-control');
+                
+                errorElements.forEach(el => {
+                    el.textContent = '';
+                    el.style.display = 'none';
+                });
+                
+                inputElements.forEach(el => {
+                    el.classList.remove('error');
+                });
+            }
+
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            function showToast(message, type = 'info') {
+                // This function will be implemented in the main script.js
+                if (window.showToast) {
+                    window.showToast(message, type);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Billboard Detection AI</title>
+    <meta name="description" content="Sign in to your Billboard Detection AI account">
+    <link rel="stylesheet" href="style1.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css">
+</head>
+<body class="auth-page">
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="auth-header" role="banner">
+        <div class="auth-header-container">
+            <a href="index.html" class="logo" aria-label="Return to Billboard AI homepage">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+                    <path d="M8 12h16v8H8z" fill="white" opacity="0.9"/>
+                    <path d="M10 14h12v4H10z" fill="url(#gradient)" opacity="0.7"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#2E7D32"/>
+                            <stop offset="100%" stop-color="#66BB6A"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Billboard AI</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="auth-main" role="main">
+        <div class="auth-container">
+            <div class="auth-card">
+                <header class="auth-card-header">
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to your Billboard Detection AI account</p>
+                </header>
+
+                <form class="auth-form" id="login-form" novalidate>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <i data-feather="mail" class="input-icon" aria-hidden="true"></i>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email"
+                                class="form-control" 
+                                placeholder="Enter your email"
+                                required
+                                autocomplete="email"
+                                aria-describedby="email-error"
+                            >
+                        </div>
+                        <div class="form-error" id="email-error" role="alert"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <i data-feather="lock" class="input-icon" aria-hidden="true"></i>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                class="form-control" 
+                                placeholder="Enter your password"
+                                required
+                                autocomplete="current-password"
+                                aria-describedby="password-error"
+                            >
+                            <button type="button" class="input-action" id="toggle-password" aria-label="Toggle password visibility">
+                                <i data-feather="eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="form-error" id="password-error" role="alert"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember" name="remember">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+                        <span class="btn-text">
+                            <i data-feather="log-in" aria-hidden="true"></i>
+                            Sign In
+                        </span>
+                        <div class="btn-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+
+                    <div class="form-footer">
+                        <p>
+                            Don't have an account? 
+                            <a href="sineup.html" class="auth-link">Create one</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true">
+        <!-- Toasts will be dynamically added here -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="script.js"></script>
+    <script>
+        // Initialize Feather icons and auth functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+            initializeAuth();
+        });
+
+        function initializeAuth() {
+            const loginForm = document.getElementById('login-form');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const togglePassword = document.getElementById('toggle-password');
+            const loginBtn = document.getElementById('login-btn');
+
+            // Toggle password visibility
+            togglePassword?.addEventListener('click', function() {
+                const type = passwordInput.type === 'password' ? 'text' : 'password';
+                passwordInput.type = type;
+                
+                const icon = this.querySelector('i');
+                if (type === 'text') {
+                    icon.setAttribute('data-feather', 'eye-off');
+                } else {
+                    icon.setAttribute('data-feather', 'eye');
+                }
+                feather.replace();
+            });
+
+            // Form submission
+            loginForm?.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                
+                // Clear previous errors
+                clearFormErrors();
+                
+                // Validate form
+                if (!validateLoginForm(email, password)) {
+                    return;
+                }
+                
+                // Show loading state
+                setLoginLoading(true);
+                
+                try {
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // Store user data
+                    const userData = {
+                        username: email.split('@')[0],
+                        email: email,
+                        role: 'User',
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    
+                    // Show success message
+                    showToast('Login successful! Redirecting...', 'success');
+                    
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                    
+                } catch (error) {
+                    showToast('Login failed. Please try again.', 'error');
+                    setLoginLoading(false);
+                }
+            });
+
+            function validateLoginForm(email, password) {
+                let isValid = true;
+                
+                // Email validation
+                if (!email) {
+                    showFieldError('email', 'Email is required');
+                    isValid = false;
+                } else if (!isValidEmail(email)) {
+                    showFieldError('email', 'Please enter a valid email address');
+                    isValid = false;
+                }
+                
+                // Password validation
+                if (!password) {
+                    showFieldError('password', 'Password is required');
+                    isValid = false;
+                } else if (password.length < 6) {
+                    showFieldError('password', 'Password must be at least 6 characters');
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+
+            function setLoginLoading(loading) {
+                const btnText = loginBtn.querySelector('.btn-text');
+                const btnSpinner = loginBtn.querySelector('.btn-spinner');
+                
+                if (loading) {
+                    btnText.style.display = 'none';
+                    btnSpinner.style.display = 'flex';
+                    loginBtn.disabled = true;
+                } else {
+                    btnText.style.display = 'flex';
+                    btnSpinner.style.display = 'none';
+                    loginBtn.disabled = false;
+                }
+            }
+
+            function showFieldError(fieldName, message) {
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                const inputElement = document.getElementById(fieldName);
+                
+                if (errorElement && inputElement) {
+                    errorElement.textContent = message;
+                    errorElement.style.display = 'block';
+                    inputElement.classList.add('error');
+                }
+            }
+
+            function clearFormErrors() {
+                const errorElements = document.querySelectorAll('.form-error');
+                const inputElements = document.querySelectorAll('.form-control');
+                
+                errorElements.forEach(el => {
+                    el.textContent = '';
+                    el.style.display = 'none';
+                });
+                
+                inputElements.forEach(el => {
+                    el.classList.remove('error');
+                });
+            }
+
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            function showToast(message, type = 'info') {
+                // This function will be implemented in the main script.js
+                if (window.showToast) {
+                    window.showToast(message, type);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

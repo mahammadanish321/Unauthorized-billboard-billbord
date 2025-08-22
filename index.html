@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            Billboard Detection AI - Advanced Billboard Authorization Analysis
+        </title>
+        <meta
+            name="description"
+            content="AI-powered billboard authorization detection using advanced computer vision technology"
+        />
+        <link rel="stylesheet" href="style1.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css"
+        />
+    </head>
+    <body>
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen" aria-hidden="true">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h2>Loading Billboard AI</h2>
+                <p>Initializing advanced detection systems...</p>
+            </div>
+        </div>
+
+        <!-- Skip Link for Accessibility -->
+        <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <!-- Header -->
+        <header class="header" role="banner">
+            <div class="header-container">
+                <div class="logo">
+                    <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                    >
+                        <rect
+                            width="32"
+                            height="32"
+                            rx="8"
+                            fill="url(#gradient)"
+                        />
+                        <path d="M8 12h16v8H8z" fill="white" opacity="0.9" />
+                        <path
+                            d="M10 14h12v4H10z"
+                            fill="url(#gradient)"
+                            opacity="0.7"
+                        />
+                        <defs>
+                            <linearGradient
+                                id="gradient"
+                                x1="0%"
+                                y1="0%"
+                                x2="100%"
+                                y2="100%"
+                            >
+                                <stop offset="0%" stop-color="#2E7D32" />
+                                <stop offset="100%" stop-color="#66BB6A" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>Billboard AI</span>
+                </div>
+
+                <nav
+                    class="main-nav"
+                    role="navigation"
+                    aria-label="Main navigation"
+                >
+                    <button
+                        class="nav-toggle"
+                        id="nav-toggle"
+                        aria-label="Toggle navigation"
+                        aria-expanded="false"
+                    >
+                        <span class="hamburger"></span>
+                    </button>
+                    <ul class="nav-menu" id="nav-menu" role="menubar">
+                        <li role="none">
+                            <a
+                                href="#analyze"
+                                class="nav-link active"
+                                data-section="analyze"
+                                role="menuitem"
+                                aria-current="page"
+                            >
+                                <i data-feather="camera" aria-hidden="true"></i>
+                                <span>Analyze</span>
+                            </a>
+                        </li>
+                        <li role="none">
+                            <a
+                                href="#analytics"
+                                class="nav-link"
+                                data-section="analytics"
+                                role="menuitem"
+                            >
+                                <i
+                                    data-feather="bar-chart-2"
+                                    aria-hidden="true"
+                                ></i>
+                                <span>Analytics</span>
+                            </a>
+                        </li>
+                        <li role="none">
+                            <a
+                                href="#settings"
+                                class="nav-link"
+                                data-section="settings"
+                                role="menuitem"
+                            >
+                                <i
+                                    data-feather="settings"
+                                    aria-hidden="true"
+                                ></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                        <li role="none">
+                            <a
+                                href="#profile"
+                                class="nav-link"
+                                data-section="profile"
+                                role="menuitem"
+                            >
+                                <i data-feather="user" aria-hidden="true"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main id="main-content" class="main-content" role="main">
+            <!-- Analyze Section -->
+            <section
+                id="analyze"
+                class="section active"
+                role="region"
+                aria-labelledby="analyze-title"
+            >
+                <div class="section-container">
+                    <header class="section-header">
+                        <h1 id="analyze-title" class="section-title">
+                            Billboard Detection AI
+                        </h1>
+                        <p class="section-description">
+                            Advanced AI-powered analysis to determine billboard
+                            authorization status using cutting-edge computer
+                            vision technology
+                        </p>
+                    </header>
+
+                    <div class="upload-area">
+                        <div class="upload-header">
+                            <h2>Upload Billboard Images</h2>
+                            <p>
+                                Supports JPEG, PNG, GIF, WEBP (max 10MB per
+                                file)
+                            </p>
+                        </div>
+
+                        <div
+                            class="upload-zone"
+                            id="upload-zone"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Drag and drop images or click to select files"
+                        >
+                            <div class="upload-content">
+                                <div class="upload-icon">
+                                    <i
+                                        data-feather="upload-cloud"
+                                        aria-hidden="true"
+                                    ></i>
+                                </div>
+                                <h3>Drag & drop images here</h3>
+                                <p>or click to select from your device</p>
+                                <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    id="select-files-btn"
+                                >
+                                    <i
+                                        data-feather="plus"
+                                        aria-hidden="true"
+                                    ></i>
+                                    Select Images
+                                </button>
+                            </div>
+                        </div>
+
+                        <input
+                            type="file"
+                            id="file-input"
+                            accept="image/*"
+                            multiple
+                            style="display: none"
+                            aria-hidden="true"
+                        />
+
+                        <!-- Image Gallery -->
+                        <div
+                            class="image-gallery"
+                            id="image-gallery"
+                            role="region"
+                            aria-label="Uploaded images"
+                        >
+                            <!-- Images will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section
+                id="analytics"
+                class="section"
+                role="region"
+                aria-labelledby="analytics-title"
+            >
+                <div class="section-container">
+                    <header class="section-header">
+                        <h1 id="analytics-title" class="section-title">
+                            Analytics & History
+                        </h1>
+                        <p class="section-description">
+                            Comprehensive analytics and historical data of your
+                            billboard analyses
+                        </p>
+                    </header>
+
+                    <!-- Statistics Dashboard -->
+                    <div
+                        class="stats-grid"
+                        role="region"
+                        aria-label="Analytics overview"
+                    >
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i data-feather="image" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Total Analyzed</h3>
+                                <p class="stat-number" id="total-analyzed">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon authorized">
+                                <i
+                                    data-feather="check-circle"
+                                    aria-hidden="true"
+                                ></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Authorized</h3>
+                                <p class="stat-number" id="authorized-count">
+                                    0
+                                </p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon unauthorized">
+                                <i
+                                    data-feather="x-circle"
+                                    aria-hidden="true"
+                                ></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Unauthorized</h3>
+                                <p class="stat-number" id="unauthorized-count">
+                                    0
+                                </p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i
+                                    data-feather="trending-up"
+                                    aria-hidden="true"
+                                ></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Accuracy Rate</h3>
+                                <p class="stat-number" id="accuracy-rate">
+                                    98.5%
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analysis History -->
+                    <div class="history-section">
+                        <div class="history-header">
+                            <h2>Analysis History</h2>
+                            <div class="history-controls">
+                                <div class="search-box">
+                                    <i
+                                        data-feather="search"
+                                        aria-hidden="true"
+                                    ></i>
+                                    <input
+                                        type="text"
+                                        id="history-search"
+                                        placeholder="Search by image name..."
+                                        aria-label="Search history"
+                                    />
+                                </div>
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    id="export-csv"
+                                    aria-label="Export history to CSV"
+                                >
+                                    <i
+                                        data-feather="download"
+                                        aria-hidden="true"
+                                    ></i>
+                                    Export CSV
+                                </button>
+                            </div>
+                        </div>
+                        <div class="history-content" id="history-content">
+                            <div class="empty-state">
+                                <i data-feather="folder" aria-hidden="true"></i>
+                                <h3>No analysis results yet</h3>
+                                <p>
+                                    Upload and analyze some billboard images to
+                                    see your history here
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section
+                id="settings"
+                class="section"
+                role="region"
+                aria-labelledby="settings-title"
+            >
+                <div class="section-container">
+                    <header class="section-header">
+                        <h1 id="settings-title" class="section-title">
+                            Settings
+                        </h1>
+                        <p class="section-description">
+                            Customize your Billboard Detection AI experience and
+                            preferences
+                        </p>
+                    </header>
+
+                    <div class="settings-grid">
+                        <!-- User Preferences -->
+                        <div class="settings-card">
+                            <h2>User Preferences</h2>
+                            <form class="settings-form" id="preferences-form">
+                                <div class="form-group">
+                                    <label for="theme-select">Theme</label>
+                                    <select
+                                        id="theme-select"
+                                        class="form-control"
+                                    >
+                                        <option value="light">
+                                            Light Mode
+                                        </option>
+                                        <option value="dark">Dark Mode</option>
+                                        <option value="auto">
+                                            Auto (System)
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="notifications">
+                                        <input
+                                            type="checkbox"
+                                            id="notifications"
+                                            checked
+                                        />
+                                        <span class="checkmark"></span>
+                                        Enable notifications
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="max-file-size"
+                                        >Maximum file size (MB)</label
+                                    >
+                                    <input
+                                        type="range"
+                                        id="max-file-size"
+                                        min="1"
+                                        max="50"
+                                        value="10"
+                                        class="form-range"
+                                    />
+                                    <span
+                                        class="range-value"
+                                        id="file-size-value"
+                                        >10 MB</span
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="auto-analyze">
+                                        <input
+                                            type="checkbox"
+                                            id="auto-analyze"
+                                        />
+                                        <span class="checkmark"></span>
+                                        Auto-analyze uploaded images
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i
+                                        data-feather="save"
+                                        aria-hidden="true"
+                                    ></i>
+                                    Save Preferences
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- System Information -->
+                        <div class="settings-card">
+                            <h2>System Requirements</h2>
+                            <div class="system-info">
+                                <p>
+                                    For optimal performance, ensure your system
+                                    meets these requirements:
+                                </p>
+                                <ul class="requirements-list">
+                                    <li>
+                                        <i
+                                            data-feather="globe"
+                                            aria-hidden="true"
+                                        ></i>
+                                        <div>
+                                            <strong>Browser:</strong>
+                                            <span
+                                                >Latest Chrome, Firefox, Safari,
+                                                or Edge</span
+                                            >
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i
+                                            data-feather="wifi"
+                                            aria-hidden="true"
+                                        ></i>
+                                        <div>
+                                            <strong>Internet:</strong>
+                                            <span
+                                                >Stable connection (5+ Mbps
+                                                recommended)</span
+                                            >
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i
+                                            data-feather="cpu"
+                                            aria-hidden="true"
+                                        ></i>
+                                        <div>
+                                            <strong>Device:</strong>
+                                            <span>4GB+ RAM, modern CPU</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i
+                                            data-feather="monitor"
+                                            aria-hidden="true"
+                                        ></i>
+                                        <div>
+                                            <strong>Display:</strong>
+                                            <span
+                                                >1280×720 or higher
+                                                resolution</span
+                                            >
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section
+                id="profile"
+                class="section"
+                role="region"
+                aria-labelledby="profile-title"
+            >
+                <div class="section-container">
+                    <header class="section-header">
+                        <h1 id="profile-title" class="section-title">
+                            Your Profile
+                        </h1>
+                        <p class="section-description">
+                            Manage your account details and access settings
+                        </p>
+                    </header>
+
+                    <div class="profile-content" id="profile-content">
+                        <!-- Logged in state -->
+                        <div
+                            class="profile-card logged-in"
+                            id="profile-logged-in"
+                            style="display: none"
+                        >
+                            <div class="profile-header">
+                                <div class="profile-avatar">
+                                    <i
+                                        data-feather="user"
+                                        aria-hidden="true"
+                                    ></i>
+                                </div>
+                                <div class="profile-info">
+                                    <h2 id="profile-username">Username</h2>
+                                    <p id="profile-email">email@example.com</p>
+                                    <span
+                                        class="profile-badge"
+                                        id="profile-role"
+                                        >User</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="profile-actions">
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    id="logout-btn"
+                                >
+                                    <i
+                                        data-feather="log-out"
+                                        aria-hidden="true"
+                                    ></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Logged out state -->
+                        <div class="auth-card" id="profile-logged-out">
+                            <div class="auth-content">
+                                <h2>Welcome to Billboard AI</h2>
+                                <p>
+                                    Sign in to access advanced features and save
+                                    your analysis history
+                                </p>
+                                <div class="auth-actions">
+                                    <a
+                                        href="login.html"
+                                        class="btn btn-primary"
+                                    >
+                                        <i
+                                            data-feather="log-in"
+                                            aria-hidden="true"
+                                        ></i>
+                                        Sign In
+                                    </a>
+                                    <a
+                                        href="signup.html"
+                                        class="btn btn-secondary"
+                                    >
+                                        <i
+                                            data-feather="user-plus"
+                                            aria-hidden="true"
+                                        ></i>
+                                        Create Account
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Toast Notifications -->
+        <div
+            class="toast-container"
+            id="toast-container"
+            aria-live="polite"
+            aria-atomic="true"
+        >
+            <!-- Toasts will be dynamically added here -->
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://unpkg.com/feather-icons"></script>
+        <script src="script.js"></script>
+        <script>
+            // Initialize Feather icons after DOM load
+            document.addEventListener("DOMContentLoaded", function () {
+                feather.replace();
+            });
+        </script>
+    </body>
+</html>
