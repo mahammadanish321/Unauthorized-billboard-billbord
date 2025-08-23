@@ -1,27 +1,20 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            Billboard Detection AI - Advanced Billboard Authorization Analysis
-        </title>
-        <meta
-            name="description"
-            content="AI-powered billboard authorization detection using advanced computer vision technology"
-        />
-        <link rel="stylesheet" href="style1.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-            rel="stylesheet"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css"
-        />
-    </head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Billboard Detection AI - Advanced Billboard Authorization Analysis</title>
+    <meta name="description" content="AI-powered billboard authorization detection using advanced computer vision technology" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'style1.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css" />
+</head>
     <body>
         <!-- Loading Screen -->
         <div id="loading-screen" class="loading-screen" aria-hidden="true">
@@ -566,8 +559,7 @@
                                     your analysis history
                                 </p>
                                 <div class="auth-actions">
-                                    <a
-                                        href="login.html"
+                                    <a href="{% url 'login' %}"
                                         class="btn btn-primary"
                                     >
                                         <i
@@ -576,8 +568,7 @@
                                         ></i>
                                         Sign In
                                     </a>
-                                    <a
-                                        href="signup.html"
+                                    <a href="{% url 'signup' %}"
                                         class="btn btn-secondary"
                                     >
                                         <i
@@ -603,15 +594,12 @@
         >
             <!-- Toasts will be dynamically added here -->
         </div>
-
-        <!-- Scripts -->
         <script src="https://unpkg.com/feather-icons"></script>
-        <script src="script.js"></script>
-        <script>
-            // Initialize Feather icons after DOM load
-            document.addEventListener("DOMContentLoaded", function () {
-                feather.replace();
-            });
-        </script>
+    <script src="{% static 'script.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            feather.replace();
+        });
+    </script>
     </body>
 </html>
