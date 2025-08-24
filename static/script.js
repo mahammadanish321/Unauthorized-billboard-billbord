@@ -525,6 +525,7 @@ class BillboardAI {
             id: imageId,
             name: file.name,
             url: imageUrl,
+            file: file,
             status: 'pending',
             uploadTime: new Date().toISOString(),
             size: file.size
@@ -618,12 +619,14 @@ class BillboardAI {
             // Add status indicator
             this.updateImageStatus(imageElement, 'analyzing');
 
-            // Simulate AI analysis (replace with actual API call)
-            await this.performAnalysis(imageData);
+            // Call backend AI OCR
+            const aiResult = await this.performAnalysis(imageData);
 
-            // Update result
-            const result = Math.random() > 0.5 ? 'authorized' : 'unauthorized';
-            const confidence = (Math.random() * 20 + 80).toFixed(1); // 80-100%
+            // Update result based on AI response
+            const result = aiResult.is_authorised ? 'authorized' : 'unauthorized';
+            const confidence = aiResult.confidence ? Number(aiResult.confidence) : 100;
+            imageData.extractedText = aiResult.extracted_text || '';
+            const reason = aiResult.reason || (imageData.extractedText ? 'Matched text compared to authorized list.' : 'No readable text detected.');
 
             imageData.status = result;
             imageData.confidence = confidence;
@@ -634,6 +637,19 @@ class BillboardAI {
             imageElement.classList.add('analyzed');
             this.updateImageStatus(imageElement, result);
 
+            // Add extracted text and reason details under the image
+            let details = imageElement.querySelector('.analysis-details');
+            if (details) { details.remove(); }
+            details = document.createElement('div');
+            details.className = 'analysis-details';
+            const extractedDisplay = imageData.extractedText ? imageData.extractedText : '(no text detected)';
+            details.innerHTML = `
+                <div class="analysis-card">
+                    <div class="extracted"><strong>Extracted:</strong> ${extractedDisplay}</div>
+                    <div class="reason">Reason: ${reason}</div>
+                </div>`;
+            imageElement.appendChild(details);
+
             // Remove analyze button
             if (analyzeBtn) {
                 analyzeBtn.remove();
@@ -642,8 +658,9 @@ class BillboardAI {
             // Add to history
             this.addToHistory(imageData);
 
-            // Show success message
-            this.showToast(`Analysis complete: ${result} (${confidence}% confidence)`, 'success');
+            // Show result message with details
+            const extractedDisplay2 = imageData.extractedText ? imageData.extractedText : '(no text detected)';
+            this.showToast(`Analysis: ${result} (${confidence}%). Extracted: ${extractedDisplay2}. Reason: ${reason}`, result === 'authorized' ? 'success' : 'warning');
 
         } catch (error) {
             console.error('Analysis failed:', error);
@@ -657,15 +674,23 @@ class BillboardAI {
     }
 
     /**
-     * Perform analysis (placeholder for actual AI processing)
+     * Perform analysis via backend AI OCR
      */
     async performAnalysis(imageData) {
-        // Simulate processing time
-        const processingTime = Math.random() * 3000 + 2000; // 2-5 seconds
-        await new Promise(resolve => setTimeout(resolve, processingTime));
-
-        // Here you would integrate with actual AI service
-        // Example: await this.callAIService(imageData.url);
+        if (!imageData.file) {
+            throw new Error('No file found for analysis');
+        }
+        const formData = new FormData();
+        formData.append('image', imageData.file, imageData.name);
+        const resp = await fetch('/api/ai-ocr/', {
+            method: 'POST',
+            body: formData
+        });
+        if (!resp.ok) {
+            const text = await resp.text();
+            throw new Error(`AI OCR request failed: ${resp.status} ${text}`);
+        }
+        return await resp.json();
     }
 
     /**
@@ -1171,6 +1196,23 @@ style.textContent = `
         opacity: 0; 
         transform: translateX(100%); 
     }
+}
+
+/* Analysis details card */
+.analysis-card {
+    margin-top: 8px;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0; /* slate-200 */
+    background: #f8fafc;      /* slate-50 */
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+.analysis-card .extracted {
+    font-weight: 700; /* bold */
+    margin-bottom: 4px;
+}
+.analysis-card .reason {
+    color: #334155; /* slate-700 */
 }
 `;
 document.head.appendChild(style);

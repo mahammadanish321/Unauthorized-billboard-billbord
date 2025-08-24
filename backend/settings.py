@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-3yq*u@52rw$_71fl7xm-(yh3=7e^#$zkam+5am4=@8_i##d7#t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -123,6 +123,13 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Media files (uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Google AI Studio (Gemini) API key
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY', 'AIzaSyBw9k1lNrOVG4gS9GOhAYUnXNlarEjROnQ')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
