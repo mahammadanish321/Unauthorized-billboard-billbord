@@ -24,7 +24,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.signup_view, name="signup"),
-    path("home", views.home, name="home"),
+    path("home/", views.home, name="home"),
     path("login/", views.login_view, name="login"),
     path('api/', include('ocr_app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

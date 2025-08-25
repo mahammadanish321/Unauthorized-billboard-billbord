@@ -188,7 +188,7 @@
                     
                     // Redirect after short delay
                     setTimeout(() => {
-                        window.location.href = 'index.html';
+                        window.location.href = '{% url "home" %}';
                     }, 1000);
                     
                 } catch (error) {
