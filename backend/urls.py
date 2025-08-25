@@ -26,5 +26,6 @@ urlpatterns = [
     path("", views.signup_view, name="signup"),
     path("home/", views.home, name="home"),
     path("login/", views.login_view, name="login"),
+    path('get-started/', views.get_started_view, name='get_started'),
     path('api/', include('ocr_app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
