@@ -37,6 +37,7 @@ class BillboardAI {
         this.loadAnalysisHistory();
         this.cacheElements();
         this.setupEventListeners();
+        this.initUXEnhancements();
         this.initializeFeatherIcons();
         this.updateUI();
         await this.hideLoadingScreen();
@@ -74,7 +75,7 @@ class BillboardAI {
             'nav-toggle', 'nav-menu', 'upload-zone', 'file-input',
             'image-gallery', 'total-analyzed', 'authorized-count',
             'unauthorized-count', 'accuracy-rate', 'history-content',
-            'history-search', 'export-csv', 'preferences-form',
+            'history-search', 'export-csv', 'clear-history', 'preferences-form',
             'theme-select', 'notifications', 'max-file-size',
             'file-size-value', 'auto-analyze', 'profile-content',
             'profile-logged-in', 'profile-logged-out', 'profile-username',
@@ -157,6 +158,8 @@ class BillboardAI {
 
         // Export CSV button
         this.elements['export-csv']?.addEventListener('click', this.exportToCSV.bind(this));
+        // Clear history button
+        this.elements['clear-history']?.addEventListener('click', this.clearHistory.bind(this));
     }
 
     /**
@@ -626,6 +629,7 @@ class BillboardAI {
             const result = aiResult.is_authorised ? 'authorized' : 'unauthorized';
             const confidence = aiResult.confidence ? Number(aiResult.confidence) : 100;
             imageData.extractedText = aiResult.extracted_text || '';
+            imageData.location = this.extractLocation(aiResult);
             const reason = aiResult.reason || (imageData.extractedText ? 'Matched text compared to authorized list.' : 'No readable text detected.');
 
             imageData.status = result;
@@ -756,12 +760,43 @@ class BillboardAI {
             status: imageData.status,
             confidence: imageData.confidence,
             date: imageData.analyzedAt,
+            location: imageData.location || null,
             size: imageData.size
         };
 
         this.analysisHistory.unshift(historyItem);
         this.saveAnalysisHistory();
         this.updateHistory();
+    }
+
+    /**
+     * Delete a single history item by id
+     */
+    deleteHistoryItem(id) {
+        const index = this.analysisHistory.findIndex(item => item.id === id);
+        if (index === -1) return;
+        if (!confirm('Delete this history record?')) return;
+        this.analysisHistory.splice(index, 1);
+        this.saveAnalysisHistory();
+        this.updateStats();
+        this.updateHistory();
+        this.showToast('History item deleted', 'success');
+    }
+
+    /**
+     * Clear all analysis history
+     */
+    clearHistory() {
+        if (this.analysisHistory.length === 0) {
+            this.showToast('No history to clear', 'warning');
+            return;
+        }
+        if (!confirm('This will delete all analysis history. Continue?')) return;
+        this.analysisHistory = [];
+        this.saveAnalysisHistory();
+        this.updateStats();
+        this.updateHistory();
+        this.showToast('All history cleared', 'success');
     }
 
     /**
@@ -840,7 +875,9 @@ class BillboardAI {
                             <th>Status</th>
                             <th>Confidence</th>
                             <th>Date</th>
+                            <th>Location</th>
                             <th>Size</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -855,7 +892,14 @@ class BillboardAI {
                                 </td>
                                 <td>${item.confidence}%</td>
                                 <td>${this.formatDate(item.date)}</td>
+                                <td>${this.formatLocation(item.location)}</td>
                                 <td>${this.formatFileSize(item.size)}</td>
+                                <td>
+                                    <button type="button" class="btn btn-secondary" onclick="billboardAI.deleteHistoryItem('${item.id}')" aria-label="Delete record">
+                                        <i data-feather="trash-2" aria-hidden="true"></i>
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                         `).join('')}
                     </tbody>
@@ -901,7 +945,9 @@ class BillboardAI {
                             <th>Status</th>
                             <th>Confidence</th>
                             <th>Date</th>
+                            <th>Location</th>
                             <th>Size</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -916,7 +962,14 @@ class BillboardAI {
                                 </td>
                                 <td>${item.confidence}%</td>
                                 <td>${this.formatDate(item.date)}</td>
+                                <td>${this.formatLocation(item.location)}</td>
                                 <td>${this.formatFileSize(item.size)}</td>
+                                <td>
+                                    <button type="button" class="btn btn-secondary" onclick="billboardAI.deleteHistoryItem('${item.id}')" aria-label="Delete record">
+                                        <i data-feather="trash-2" aria-hidden="true"></i>
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                         `).join('')}
                     </tbody>
@@ -1164,6 +1217,175 @@ class BillboardAI {
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    /**
+     * Utility: Format location with fallback
+     */
+    formatLocation(loc) {
+        if (!loc) return 'N/A';
+        if (typeof loc === 'string') {
+            const t = loc.trim();
+            return t.length ? t : 'N/A';
+        }
+        if (typeof loc === 'object') {
+            const { address, name, city, state, country, latitude, longitude, lat, lng } = loc;
+            const parts = [name, address, city, state, country].filter(Boolean);
+            if (parts.length) return parts.join(', ');
+            const la = (typeof latitude === 'number' ? latitude : lat);
+            const lo = (typeof longitude === 'number' ? longitude : lng);
+            if (typeof la === 'number' && typeof lo === 'number') {
+                return `${la.toFixed(5)}, ${lo.toFixed(5)}`;
+            }
+        }
+        return 'N/A';
+    }
+
+    /**
+     * Try to extract a location string from backend result
+     */
+    extractLocation(aiResult) {
+        try {
+            if (!aiResult || typeof aiResult !== 'object') return null;
+            if (typeof aiResult.location === 'string' && aiResult.location.trim()) {
+                return aiResult.location.trim();
+            }
+            if (aiResult.location && typeof aiResult.location === 'object') {
+                const loc = aiResult.location;
+                const { address, name, city, state, country, latitude, longitude, lat, lng } = loc;
+                if (address || name || city || state || country) {
+                    const parts = [name, address, city, state, country].filter(Boolean);
+                    return parts.join(', ');
+                }
+                const la = (typeof latitude === 'number' ? latitude : loc.lat);
+                const lo = (typeof longitude === 'number' ? longitude : loc.lng);
+                if (typeof la === 'number' && typeof lo === 'number') {
+                    return `${la}, ${lo}`;
+                }
+            }
+            if (typeof aiResult.address === 'string' && aiResult.address.trim()) {
+                return aiResult.address.trim();
+            }
+            const lat = aiResult.latitude ?? aiResult.lat;
+            const lng = aiResult.longitude ?? aiResult.lng;
+            if (typeof lat === 'number' && typeof lng === 'number') {
+                return `${lat}, ${lng}`;
+            }
+            const geo = aiResult.geo || aiResult.gps;
+            if (geo && typeof geo === 'object') {
+                const la = geo.latitude ?? geo.lat;
+                const lo = geo.longitude ?? geo.lng;
+                if (typeof la === 'number' && typeof lo === 'number') {
+                    return `${la}, ${lo}`;
+                }
+            }
+            return null;
+        } catch (e) {
+            return null;
+        }
+    }
+/**
+     * Initialize UX enhancements: background lines, custom cursor, tilt
+     */
+    initUXEnhancements() {
+        try {
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const coarse = window.matchMedia('(pointer: coarse)').matches;
+            this.env = { reduce, coarse };
+            this.addBackgroundLines();
+            if (!reduce && !coarse) {
+                this.addCustomCursor();
+                this.enableTilt('.image-item');
+                this.enableTilt('.stat-card');
+                this.enableTilt('.upload-zone');
+            }
+        } catch (e) { /* no-op */ }
+    }
+
+    /**
+     * Add animated background lines layer
+     */
+    addBackgroundLines() {
+        if (document.querySelector('.bg-lines')) return;
+        const layer = document.createElement('div');
+        layer.className = 'bg-lines';
+        document.body.appendChild(layer);
+    }
+
+    /**
+     * Add custom cursor with hover/click feedback
+     */
+    addCustomCursor() {
+        if (document.querySelector('.cursor-ring')) return;
+        const ring = document.createElement('div');
+        const dot = document.createElement('div');
+        ring.className = 'cursor-ring';
+        dot.className = 'cursor-dot';
+        document.body.appendChild(ring);
+        document.body.appendChild(dot);
+        document.body.classList.add('enable-custom-cursor');
+
+        let rafId = null;
+        let targetX = 0, targetY = 0;
+        let ringX = 0, ringY = 0;
+
+        const move = (e) => {
+            targetX = e.clientX; targetY = e.clientY;
+            dot.style.transform = `translate(${targetX}px, ${targetY}px)`;
+            if (!rafId) rafId = requestAnimationFrame(animate);
+            // hover detection on move
+            const hoverable = e.target && e.target.closest('a, button, .btn, .nav-link, .image-item, .upload-zone, .stat-card, .form-control, .history-table tbody tr');
+            if (hoverable) ring.classList.add('cursor-hover'); else ring.classList.remove('cursor-hover');
+        };
+
+        const animate = () => {
+            const lerp = 0.2;
+            ringX += (targetX - ringX) * lerp;
+            ringY += (targetY - ringY) * lerp;
+            ring.style.transform = `translate(${ringX}px, ${ringY}px)`;
+            rafId = requestAnimationFrame(animate);
+        };
+
+        const down = () => {
+            dot.classList.add('cursor-active');
+            ring.classList.add('cursor-click');
+            setTimeout(() => ring.classList.remove('cursor-click'), 400);
+        };
+        const up = () => dot.classList.remove('cursor-active');
+
+        document.addEventListener('mousemove', move, { passive: true });
+        document.addEventListener('mousedown', down, { passive: true });
+        document.addEventListener('mouseup', up, { passive: true });
+    }
+
+    /**
+     * Enable subtle 3D tilt on elements matching selector
+     */
+    enableTilt(selector) {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+            el.classList.add('tilt');
+            let frame;
+            const onMove = (e) => {
+                cancelAnimationFrame(frame);
+                frame = requestAnimationFrame(() => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const cx = rect.width / 2;
+                    const cy = rect.height / 2;
+                    const rx = ((y - cy) / cy) * -6;
+                    const ry = ((x - cx) / cx) * 6;
+                    el.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+                });
+            };
+            const onLeave = () => {
+                cancelAnimationFrame(frame);
+                el.style.transform = '';
+            };
+            el.addEventListener('mousemove', onMove);
+            el.addEventListener('mouseleave', onLeave);
+        });
     }
 }
 
